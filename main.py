@@ -112,15 +112,148 @@ if phase == "Data Collection":
         except Exception as e:
             st.error(f"Error loading file: {str(e)}")
 
+# # 🧼 Phase 2: Data Cleaning
+# elif phase == "Data Cleaning":
+#     dummy_df = st.session_state.raw_df.copy()
+#     st.header("Phase 2: Data Cleaning 🧹")
+    
+#     if st.session_state.raw_df is None:
+#         st.warning("Please upload a dataset first in the Data Collection phase.")
+#     else:
+#         df = st.session_state.raw_df.copy()
+        
+#         # Missing values handling
+#         st.subheader("🚫 Missing Values Analysis")
+#         missing_data = df.isnull().sum()
+#         missing_data = missing_data[missing_data > 0].sort_values(ascending=False)
+        
+#         if len(missing_data) > 0:
+#             col1, col2 = st.columns(2)
+#             with col1:
+#                 st.write("**Missing Values by Column:**")
+#                 st.dataframe(missing_data.to_frame('Missing Count'))
+            
+#             with col2:
+#                 # Missing values visualization
+#                 fig, ax = plt.subplots(figsize=(8, 6))
+#                 missing_data.plot(kind='bar', ax=ax)
+#                 ax.set_title('Missing Values by Column')
+#                 ax.set_ylabel('Count')
+#                 plt.xticks(rotation=45)
+#                 st.pyplot(fig)
+#                 plt.clf()
+#         else:
+#             st.success("✅ No missing values found!")
+        
+#         # Cleaning options
+#         st.subheader("🛠️ Cleaning Options")
+        
+#         col1, col2 = st.columns(2)
+#         with col1:
+#             if st.button("Drop All Rows with Missing Values"):
+#                 dummy_df = dummy_df.dropna()
+#                 st.success(f"Dropped rows with missing values. New shape: {dummy_df.shape}")
+#                 shape = dummy_df.shape
+        
+#         with col2:
+#             if st.button("Drop Duplicate Rows"):
+#                 initial_shape = df.shape[0]
+#                 dummy_df = dummy_df.drop_duplicates()
+#                 # dummy_df = df.copy()
+#                 removed = initial_shape - df.shape[0]
+#                 st.success(f"Removed {removed} duplicate rows. New shape: {dummy_df.shape}")
+#                 shape = dummy_df.shape
+        
+#         # Advanced missing value handling
+#         with st.expander("🎯 Advanced Missing Value Handling"):
+#             if len(missing_data) > 0:
+#                 col_to_fill = st.selectbox("Select column to fill missing values:", missing_data.index)
+#                 fill_method = st.selectbox("Fill method:", ["Forward Fill", "Backward Fill", "Mean", "Median", "Mode", "Custom Value"])
+                
+#                 if st.button("Apply Fill Method"):
+#                     if fill_method == "Forward Fill":
+#                         df[col_to_fill].fillna(method='ffill', inplace=True)
+#                         dummy_df = df.copy()
+#                     elif fill_method == "Backward Fill":
+#                         df[col_to_fill].fillna(method='bfill', inplace=True)
+#                         dummy_df = df.copy()
+#                     elif fill_method == "Mean" and df[col_to_fill].dtype in ['int64', 'float64']:
+#                         dummy_df = df.copy()
+#                         df[col_to_fill].fillna(df[col_to_fill].mean(), inplace=True)
+#                     elif fill_method == "Median" and df[col_to_fill].dtype in ['int64', 'float64']:
+#                         dummy_df = df.copy()
+#                         df[col_to_fill].fillna(df[col_to_fill].median(), inplace=True)
+#                         dummy_df = df.copy()
+#                     elif fill_method == "Mode":
+#                         df[col_to_fill].fillna(df[col_to_fill].mode()[0], inplace=True)
+#                         dummy_df = df.copy()
+#                     elif fill_method == "Custom Value":
+#                         custom_val = st.text_input("Enter custom value:")
+#                         if custom_val:
+#                             df[col_to_fill].fillna(custom_val, inplace=True)
+#                             dummy_df = df.copy()
+                    
+#                     st.success(f"Applied {fill_method} to {col_to_fill}")
+        
+#         # Data type conversion
+#         with st.expander("🔄 Data Type Conversion"):
+#             col_to_convert = st.selectbox("Select column to convert:", df.columns)
+#             new_type = st.selectbox("New data type:", ["int64","int32","int16","float64", "object", "datetime64", "category"])
+            
+#             if st.button("Convert Data Type"):
+#                 try:
+#                     if new_type == "datetime64":
+#                         dummy_df[col_to_convert] = pd.to_datetime(dummy_df[col_to_convert])
+#                     else:
+#                         dummy_df[col_to_convert] = dummy_df[col_to_convert].astype(new_type)
+#                     st.success(f"Converted {col_to_convert} to {new_type}")
+#                 except Exception as e:
+#                     st.error(f"Error converting data type: {str(e)}")
+        
+#         # Column selection
+#         st.subheader("📝 Column Selection")
+#         selected_columns = st.multiselect("Select columns to keep:", df.columns.tolist(), default=df.columns.tolist())
+        
+#         if selected_columns:
+#             dummy_df = dummy_df[selected_columns]
+#             st.write(f"Selected dataset shape: {dummy_df.shape}")
+#             shape = dummy_df.shape
+            
+#             if st.button("✅ Save as Final Dataset"):
+#                 st.session_state.final_df = dummy_df.copy()
+#                 st.success(f"Dataset saved as final! You can now proceed to analysis phases.{dummy_df.shape}")
+#                 shape = st.session_state.final_df.shape
+
 # 🧼 Phase 2: Data Cleaning
 elif phase == "Data Cleaning":
-    dummy_df = st.session_state.raw_df.copy()
     st.header("Phase 2: Data Cleaning 🧹")
     
     if st.session_state.raw_df is None:
         st.warning("Please upload a dataset first in the Data Collection phase.")
     else:
-        df = st.session_state.raw_df.copy()
+        # Initialize working dataframe
+        if "working_df" not in st.session_state:
+            st.session_state.working_df = st.session_state.raw_df.copy()
+        
+        df = st.session_state.working_df
+        
+        # Display current dataset info
+        st.subheader("📊 Current Dataset Status")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Rows", df.shape[0])
+        with col2:
+            st.metric("Columns", df.shape[1])
+        with col3:
+            st.metric("Missing Values", df.isnull().sum().sum())
+        with col4:
+            st.metric("Memory Usage", f"{df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+        
+        # Reset button
+        if st.button("🔄 Reset to Original Dataset"):
+            st.session_state.working_df = st.session_state.raw_df.copy()
+            st.success("Dataset reset to original state!")
+            st.rerun()
         
         # Missing values handling
         st.subheader("🚫 Missing Values Analysis")
@@ -131,7 +264,11 @@ elif phase == "Data Cleaning":
             col1, col2 = st.columns(2)
             with col1:
                 st.write("**Missing Values by Column:**")
-                st.dataframe(missing_data.to_frame('Missing Count'))
+                missing_df = pd.DataFrame({
+                    'Missing Count': missing_data,
+                    'Missing Percentage': (missing_data / len(df) * 100).round(2)
+                })
+                st.dataframe(missing_df)
             
             with col2:
                 # Missing values visualization
@@ -146,23 +283,24 @@ elif phase == "Data Cleaning":
             st.success("✅ No missing values found!")
         
         # Cleaning options
-        st.subheader("🛠️ Cleaning Options")
+        st.subheader("🛠️ Basic Cleaning Operations")
         
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Drop All Rows with Missing Values"):
-                dummy_df = dummy_df.dropna()
-                st.success(f"Dropped rows with missing values. New shape: {dummy_df.shape}")
-                shape = dummy_df.shape
+                initial_rows = df.shape[0]
+                st.session_state.working_df = df.dropna()
+                removed_rows = initial_rows - st.session_state.working_df.shape[0]
+                st.success(f"Removed {removed_rows} rows with missing values. New shape: {st.session_state.working_df.shape}")
+                st.rerun()
         
         with col2:
             if st.button("Drop Duplicate Rows"):
-                initial_shape = df.shape[0]
-                dummy_df = dummy_df.drop_duplicates()
-                # dummy_df = df.copy()
-                removed = initial_shape - df.shape[0]
-                st.success(f"Removed {removed} duplicate rows. New shape: {dummy_df.shape}")
-                shape = dummy_df.shape
+                initial_rows = df.shape[0]
+                st.session_state.working_df = df.drop_duplicates()
+                removed_rows = initial_rows - st.session_state.working_df.shape[0]
+                st.success(f"Removed {removed_rows} duplicate rows. New shape: {st.session_state.working_df.shape}")
+                st.rerun()
         
         # Advanced missing value handling
         with st.expander("🎯 Advanced Missing Value Handling"):
@@ -170,59 +308,157 @@ elif phase == "Data Cleaning":
                 col_to_fill = st.selectbox("Select column to fill missing values:", missing_data.index)
                 fill_method = st.selectbox("Fill method:", ["Forward Fill", "Backward Fill", "Mean", "Median", "Mode", "Custom Value"])
                 
+                if fill_method == "Custom Value":
+                    custom_val = st.text_input("Enter custom value:")
+                
                 if st.button("Apply Fill Method"):
-                    if fill_method == "Forward Fill":
-                        df[col_to_fill].fillna(method='ffill', inplace=True)
-                        dummy_df = df.copy()
-                    elif fill_method == "Backward Fill":
-                        df[col_to_fill].fillna(method='bfill', inplace=True)
-                        dummy_df = df.copy()
-                    elif fill_method == "Mean" and df[col_to_fill].dtype in ['int64', 'float64']:
-                        dummy_df = df.copy()
-                        df[col_to_fill].fillna(df[col_to_fill].mean(), inplace=True)
-                    elif fill_method == "Median" and df[col_to_fill].dtype in ['int64', 'float64']:
-                        dummy_df = df.copy()
-                        df[col_to_fill].fillna(df[col_to_fill].median(), inplace=True)
-                        dummy_df = df.copy()
-                    elif fill_method == "Mode":
-                        df[col_to_fill].fillna(df[col_to_fill].mode()[0], inplace=True)
-                        dummy_df = df.copy()
-                    elif fill_method == "Custom Value":
-                        custom_val = st.text_input("Enter custom value:")
-                        if custom_val:
-                            df[col_to_fill].fillna(custom_val, inplace=True)
-                            dummy_df = df.copy()
+                    working_df = df.copy()
                     
-                    st.success(f"Applied {fill_method} to {col_to_fill}")
+                    try:
+                        if fill_method == "Forward Fill":
+                            working_df[col_to_fill] = working_df[col_to_fill].fillna(method='ffill')
+                        elif fill_method == "Backward Fill":
+                            working_df[col_to_fill] = working_df[col_to_fill].fillna(method='bfill')
+                        elif fill_method == "Mean" and working_df[col_to_fill].dtype in ['int64', 'float64']:
+                            working_df[col_to_fill] = working_df[col_to_fill].fillna(working_df[col_to_fill].mean())
+                        elif fill_method == "Median" and working_df[col_to_fill].dtype in ['int64', 'float64']:
+                            working_df[col_to_fill] = working_df[col_to_fill].fillna(working_df[col_to_fill].median())
+                        elif fill_method == "Mode":
+                            mode_value = working_df[col_to_fill].mode()
+                            if len(mode_value) > 0:
+                                working_df[col_to_fill] = working_df[col_to_fill].fillna(mode_value[0])
+                        elif fill_method == "Custom Value":
+                            if custom_val:
+                                # Try to convert custom value to appropriate type
+                                if working_df[col_to_fill].dtype in ['int64', 'float64']:
+                                    try:
+                                        custom_val = float(custom_val)
+                                    except ValueError:
+                                        st.error("Please enter a numeric value for numeric columns")
+                                working_df[col_to_fill] = working_df[col_to_fill].fillna(custom_val)
+                            else:
+                                st.error("Please enter a custom value")
+                        
+                        st.session_state.working_df = working_df
+                        filled_count = df[col_to_fill].isnull().sum() - working_df[col_to_fill].isnull().sum()
+                        st.success(f"Applied {fill_method} to {col_to_fill}. Filled {filled_count} missing values.")
+                        st.rerun()
+                        
+                    except Exception as e:
+                        st.error(f"Error applying fill method: {str(e)}")
         
         # Data type conversion
         with st.expander("🔄 Data Type Conversion"):
             col_to_convert = st.selectbox("Select column to convert:", df.columns)
-            new_type = st.selectbox("New data type:", ["int64","int32","int16","float64", "object", "datetime64", "category"])
+            current_type = str(df[col_to_convert].dtype)
+            st.write(f"Current type: **{current_type}**")
+            
+            new_type = st.selectbox("New data type:", ["int64", "int32", "int16", "float64", "object", "datetime64", "category"])
             
             if st.button("Convert Data Type"):
                 try:
+                    working_df = df.copy()
                     if new_type == "datetime64":
-                        dummy_df[col_to_convert] = pd.to_datetime(dummy_df[col_to_convert])
+                        working_df[col_to_convert] = pd.to_datetime(working_df[col_to_convert], errors='coerce')
                     else:
-                        dummy_df[col_to_convert] = dummy_df[col_to_convert].astype(new_type)
-                    st.success(f"Converted {col_to_convert} to {new_type}")
+                        working_df[col_to_convert] = working_df[col_to_convert].astype(new_type)
+                    
+                    st.session_state.working_df = working_df
+                    st.success(f"Converted {col_to_convert} from {current_type} to {new_type}")
+                    st.rerun()
                 except Exception as e:
                     st.error(f"Error converting data type: {str(e)}")
         
-        # Column selection
-        st.subheader("📝 Column Selection")
-        selected_columns = st.multiselect("Select columns to keep:", df.columns.tolist(), default=df.columns.tolist())
-        
-        if selected_columns:
-            dummy_df = dummy_df[selected_columns]
-            st.write(f"Selected dataset shape: {dummy_df.shape}")
-            shape = dummy_df.shape
+        # Column operations
+        with st.expander("📝 Column Operations"):
+            # Drop columns
+            st.write("**Drop Columns:**")
+            cols_to_drop = st.multiselect("Select columns to drop:", df.columns.tolist())
+            if cols_to_drop and st.button("Drop Selected Columns"):
+                working_df = df.drop(columns=cols_to_drop)
+                st.session_state.working_df = working_df
+                st.success(f"Dropped {len(cols_to_drop)} columns. New shape: {working_df.shape}")
+                st.rerun()
             
-            if st.button("✅ Save as Final Dataset"):
-                st.session_state.final_df = dummy_df.copy()
-                st.success(f"Dataset saved as final! You can now proceed to analysis phases.{dummy_df.shape}")
-                shape = st.session_state.final_df.shape
+            # Rename columns
+            st.write("**Rename Column:**")
+            col1, col2 = st.columns(2)
+            with col1:
+                old_name = st.selectbox("Column to rename:", df.columns.tolist(), key="rename_old")
+            with col2:
+                new_name = st.text_input("New name:", key="rename_new")
+            
+            if new_name and st.button("Rename Column"):
+                if new_name not in df.columns:
+                    working_df = df.rename(columns={old_name: new_name})
+                    st.session_state.working_df = working_df
+                    st.success(f"Renamed '{old_name}' to '{new_name}'")
+                    st.rerun()
+                else:
+                    st.error(f"Column '{new_name}' already exists!")
+        
+        # Data filtering
+        with st.expander("🔍 Data Filtering"):
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            if numeric_cols:
+                filter_col = st.selectbox("Select column to filter:", numeric_cols)
+                col_min = float(df[filter_col].min())
+                col_max = float(df[filter_col].max())
+                
+                range_values = st.slider(
+                    f"Select range for {filter_col}",
+                    min_value=col_min,
+                    max_value=col_max,
+                    value=(col_min, col_max)
+                )
+                
+                if st.button("Apply Filter"):
+                    working_df = df[(df[filter_col] >= range_values[0]) & (df[filter_col] <= range_values[1])]
+                    st.session_state.working_df = working_df
+                    filtered_count = len(df) - len(working_df)
+                    st.success(f"Filtered out {filtered_count} rows. New shape: {working_df.shape}")
+                    st.rerun()
+        
+        # Preview current dataset
+        st.subheader("Current Dataset Preview")
+        st.write(f"**Current shape:** {df.shape[0]} rows × {df.shape[1]} columns")
+        
+        # Show before/after comparison if changes were made
+        if df.shape != st.session_state.raw_df.shape:
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write("**Original:**")
+                st.write(f"Shape: {st.session_state.raw_df.shape}")
+                st.write(f"Missing values: {st.session_state.raw_df.isnull().sum().sum()}")
+            with col2:
+                st.write("**Current:**")
+                st.write(f"Shape: {df.shape}")
+                st.write(f"Missing values: {df.isnull().sum().sum()}")
+        
+        # Display sample of current data
+        st.dataframe(df.head(10), use_container_width=True)
+        
+        # Show data types
+        with st.expander("📋 Current Data Types"):
+            dtype_df = pd.DataFrame({
+                'Column': df.columns,
+                'Data Type': df.dtypes.astype(str),
+                'Non-Null Count': df.count(),
+                'Null Count': df.isnull().sum(),
+                'Unique Values': df.nunique()
+            })
+            st.dataframe(dtype_df)
+        
+        # Final save button
+        st.subheader("💾 Save Cleaned Dataset")
+        if st.button("✅ Save as Final Dataset", type="primary"):
+            st.session_state.final_df = df.copy()
+            st.success(f"✅ Dataset saved as final! Shape: {df.shape}")
+            st.success("You can now proceed to the analysis phases.")
+            
+            # Clear working dataframe to save memory
+            if "working_df" in st.session_state:
+                del st.session_state.working_df
 
 # 🔍 Phase 3: Exploratory Data Analysis
 elif phase == "Exploratory Data Analysis":

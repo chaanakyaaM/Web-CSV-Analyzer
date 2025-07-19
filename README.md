@@ -1,0 +1,84 @@
+# Web CSV Analyzer
+
+**Web CSV Analyzer** is a Streamlit-powered web application designed to help you upload, explore, clean, and analyze CSV datasets seamlessly. With built-in data profiling, visualizations, statistical tests, and export options, it's your go-to tool for quick and effective data analysis.
+
+---
+
+## 🚀 Features
+
+- 📁 **Upload CSV Files** – Drag and drop or select local CSV files for analysis
+- 🧹 **Data Cleaning** – Handle missing values, remove duplicates, and convert data types
+- 📊 **Exploratory Data Analysis (EDA)** – Generate summary statistics, distribution plots, and box plots
+- 📈 **Advanced Visualizations** – Correlation heatmaps, interactive scatter plots, time series, and more
+- 📐 **Statistical Analysis** – Correlation tests, linear regression, and basic ML models
+- 📤 **Export Cleaned Data** – Download final dataset and auto-generated reports
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend/UI**: `Streamlit`
+- **Data Handling**: `pandas`, `numpy`
+- **Visualization**: `seaborn`, `matplotlib`, `plotly`
+- **Modeling**: `scikit-learn`, `scipy`
+- **API Integration** *(optional)*: Gemini API for report insights (via `.env` keys)
+
+---
+
+## 📦 Setup Instructions
+
+1. **Clone the Repo**
+```bash
+git clone https://github.com/your-username/web-csv-analyzer.git
+cd web-csv-analyzer
+```
+
+2. **Create Virtual Environment** (optional but recommended)
+```bash
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+```
+
+3. **Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Set up .env file** (optional for Gemini integration)
+```env
+GEMINI_API_KEY=your_api_key_here
+MODEL_NAME=gemini-pro
+```
+
+5. **Run the App**
+```bash
+streamlit run app.py
+```
+
+---
+
+## 📷 Screenshots
+> _Add a few screenshots here showing file upload, cleaning, plots, etc._
+
+---
+
+## 🧠 Use Cases
+- Data preprocessing for ML projects
+- Quick EDA on messy datasets
+- Teaching data cleaning concepts visually
+- Generating visual/statistical reports from raw files
+
+---
+
+## 🤖 Optional: Gemini-Powered Reports
+You can plug in the Gemini API to generate markdown-based summaries of your dataset's quality, completeness, and key insights — perfect for automated reporting!
+
+---
+
+## ✨ Credits
+Created with ❤️ by [Your Name](https://github.com/your-username)
+
+---
+
+## 📄 License
+This project is open-source under the [MIT License](LICENSE).
