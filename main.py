@@ -126,7 +126,7 @@ elif phase == "Data Cleaning":
         df = st.session_state.working_df
         
         # Display current dataset info
-        st.subheader("📊 Current Dataset Status")
+        st.subheader("Current Dataset Status")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.metric("Rows", df.shape[0])
