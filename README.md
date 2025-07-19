@@ -29,7 +29,7 @@
 
 1. **Clone the Repo**
 ```bash
-git clone https://github.com/your-username/web-csv-analyzer.git
+git clone https://github.com/chaanakyaaM/Web-CSV-Analyzer.git
 cd web-csv-analyzer
 ```
 
@@ -55,14 +55,11 @@ MODEL_NAME=gemini-pro
 streamlit run app.py
 ```
 
----
-
-## 📷 Screenshots
-> _Add a few screenshots here showing file upload, cleaning, plots, etc._
 
 ---
 
 ## 🧠 Use Cases
+- Performing simple data analysis
 - Data preprocessing for ML projects
 - Quick EDA on messy datasets
 - Teaching data cleaning concepts visually
@@ -76,9 +73,7 @@ You can plug in the Gemini API to generate markdown-based summaries of your data
 ---
 
 ## ✨ Credits
-Created with ❤️ by [Your Name](https://github.com/your-username)
+Created with ❤️ by [chaanakyaa M](https://github.com/chaanakyaaM)
 
 ---
 
-## 📄 License
-This project is open-source under the [MIT License](LICENSE).
