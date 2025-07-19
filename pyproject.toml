@@ -1,7 +1,7 @@
 [project]
-name = "data-analyzer"
+name = "Web CSV Analyzer"
 version = "0.1.0"
-description = "Add your description here"
+description = "A web-based tool for uploading, exploring, cleaning, and analyzing CSV data through an interactive interface."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
