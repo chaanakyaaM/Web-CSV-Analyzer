@@ -21,7 +21,7 @@
 - **Data Handling**: `pandas`, `numpy`
 - **Visualization**: `seaborn`, `matplotlib`, `plotly`
 - **Modeling**: `scikit-learn`, `scipy`
-- **API Integration** *(optional)*: Gemini API for report insights (via `.env` keys)
+- **API Integration** *(optional)*: Gemini API for report insights 
 
 ---
 
@@ -36,7 +36,7 @@ cd web-csv-analyzer
 2. **Create Virtual Environment** (optional but recommended)
 ```bash
 python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+venv/Scripts/activate  # or source venv\bin\activate on Linux
 ```
 
 3. **Install Dependencies**
@@ -64,11 +64,12 @@ streamlit run app.py
 - Quick EDA on messy datasets
 - Teaching data cleaning concepts visually
 - Generating visual/statistical reports from raw files
+- Insights report generation using AI
 
 ---
 
 ## 🤖 Optional: Gemini-Powered Reports
-You can plug in the Gemini API to generate markdown-based summaries of your dataset's quality, completeness, and key insights — perfect for automated reporting!
+You can plug in the Gemini API to generate summaries of your dataset's quality, completeness, and key insights — perfect for automated reporting!
 
 ---
 

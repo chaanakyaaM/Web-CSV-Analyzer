@@ -1,26 +1,25 @@
-import streamlit as st
+import io
+import os
+import requests
+import warnings
+import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
-import io
+import streamlit as st
 from scipy import stats
+import plotly.express as px
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
-import warnings
 from dotenv import load_dotenv      
-import requests
-import io
-import os
 
 load_dotenv()
 
 warnings.filterwarnings('ignore')
 
 # 🧠 Title & Intro
-st.title("📊 Enhanced CSV Data Analyzer")
+st.title("📊 Web CSV Data Analyzer")
 st.markdown("*Comprehensive data analysis tool with advanced features*")
 
 # Sidebar for navigation
@@ -45,7 +44,7 @@ st.sidebar.markdown("""
 6. **Data Export & Reports** 
 """)
 
-# 🧠 Session state to store datasets and analysis results
+#  Session state to store datasets and analysis results
 if "raw_df" not in st.session_state:
     st.session_state.raw_df = None
 if "final_df" not in st.session_state:
@@ -54,7 +53,7 @@ if "analysis_results" not in st.session_state:
     st.session_state.analysis_results = {}
 
 shape=(0,0)
-# 🌐 Phase 1: Data Collection
+#  Phase 1: Data Collection
 if phase == "Data Collection":
     st.header("Phase 1: Data Collection 📁")
     
@@ -112,7 +111,7 @@ if phase == "Data Collection":
         except Exception as e:
             st.error(f"Error loading file: {str(e)}")
 
-# 🧼 Phase 2: Data Cleaning
+#  Phase 2: Data Cleaning
 elif phase == "Data Cleaning":
     st.header("Phase 2: Data Cleaning 🧹")
     
@@ -348,7 +347,7 @@ elif phase == "Data Cleaning":
             if "working_df" in st.session_state:
                 del st.session_state.working_df
 
-# 🔍 Phase 3: Exploratory Data Analysis
+#  Phase 3: Exploratory Data Analysis
 elif phase == "Exploratory Data Analysis":
     st.header("Phase 3: Exploratory Data Analysis 🔍")
     
@@ -416,7 +415,7 @@ elif phase == "Exploratory Data Analysis":
                 st.pyplot(fig)
                 plt.clf()
 
-# 📊 Phase 4: Advanced Visualization
+#  Phase 4: Advanced Visualization
 elif phase == "Advanced Visualization":
     st.header("Phase 4: Advanced Visualization 📊")
     
@@ -490,7 +489,7 @@ elif phase == "Advanced Visualization":
             st.pyplot(fig)
             plt.clf()
 
-# # 📊 Phase 5: Statistical Analysis
+# #  Phase 5: Statistical Analysis
 elif phase == "Statistical Analysis":
     st.header("Phase 5: Statistical Analysis 📊")
     
@@ -914,7 +913,7 @@ elif phase == "Statistical Analysis":
         }
             
 
-# 💾 Phase 6: Data Export & Reports
+#  Phase 6: Data Export & Reports
 elif phase == "Data Export & Reports":
     st.header("Phase 6: Data Export & Reports 💾")
 
@@ -968,13 +967,13 @@ elif phase == "Data Export & Reports":
             from google import genai
             api_key = os.getenv("GEMINI_API_KEY")
 
-            client = genai.Client(api_key=api_key)
+            client = genai.Client(api_key = api_key)
 
             try:
                 def response():
                     response = client.models.generate_content(
                         model=os.getenv("MODEL_NAME"),
-                        contents=f"Give me the key insights from this analysis report in markdown format, analysis report:{report}",
+                        contents=f"Summarize the key insights from the analysis report below. Focus on highlighting major findings, trends, and any actionable recommendations. Provide clarity on the implications of these insights. Analysis report: {report}"
                     )
                     return response
                 insights = response()
