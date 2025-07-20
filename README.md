@@ -6,12 +6,12 @@
 
 ## 🚀 Features
 
-- 📁 **Upload CSV Files** – Drag and drop or select local CSV files for analysis
-- 🧹 **Data Cleaning** – Handle missing values, remove duplicates, and convert data types
-- 📊 **Exploratory Data Analysis (EDA)** – Generate summary statistics, distribution plots, and box plots
-- 📈 **Advanced Visualizations** – Correlation heatmaps, interactive scatter plots, time series, and more
-- 📐 **Statistical Analysis** – Correlation tests, linear regression, and basic ML models
-- 📤 **Export Cleaned Data** – Download final dataset and auto-generated reports
+-  **Upload CSV Files** – Drag and drop or select local CSV files for analysis
+-  **Data Cleaning** – Handle missing values, remove duplicates, and convert data types
+-  **Exploratory Data Analysis (EDA)** – Generate summary statistics, distribution plots, and box plots
+-  **Advanced Visualizations** – Correlation heatmaps, interactive scatter plots, time series, and more
+-  **Statistical Analysis** – Correlation tests, linear regression, and basic ML models
+-  **Export Cleaned Data** – Download final dataset and auto-generated reports
 
 ---
 

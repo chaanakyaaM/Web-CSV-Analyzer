@@ -8,11 +8,11 @@ import seaborn as sns
 import streamlit as st
 from scipy import stats
 import plotly.express as px
+from dotenv import load_dotenv      
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
-from dotenv import load_dotenv      
 
 # Load environment variables
 load_dotenv()
