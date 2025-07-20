@@ -14,8 +14,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from dotenv import load_dotenv      
 
+# Load environment variables
 load_dotenv()
 
+# Set page Config
 warnings.filterwarnings('ignore')
 
 # 🧠 Title & Intro
@@ -33,6 +35,7 @@ phase = st.sidebar.selectbox("Select Analysis Phase", [
     "Data Export & Reports"
 ])
 
+# Sidebar info
 st.sidebar.markdown("---")
 st.sidebar.subheader("📋 Analysis Phases")
 st.sidebar.markdown("""
@@ -173,6 +176,8 @@ elif phase == "Data Cleaning":
         st.subheader("🛠️ Basic Cleaning Operations")
         
         col1, col2 = st.columns(2)
+
+        # Drop rows with missing values
         with col1:
             if st.button("Drop All Rows with Missing Values"):
                 initial_rows = df.shape[0]
@@ -181,6 +186,7 @@ elif phase == "Data Cleaning":
                 st.success(f"Removed {removed_rows} rows with missing values. New shape: {st.session_state.working_df.shape}")
                 st.rerun()
         
+        # Drop duplicate rows
         with col2:
             if st.button("Drop Duplicate Rows"):
                 initial_rows = df.shape[0]
@@ -197,10 +203,10 @@ elif phase == "Data Cleaning":
                 
                 if fill_method == "Custom Value":
                     custom_val = st.text_input("Enter custom value:")
-                
                 if st.button("Apply Fill Method"):
                     working_df = df.copy()
                     
+                    # Fill methods 
                     try:
                         if fill_method == "Forward Fill":
                             working_df[col_to_fill] = working_df[col_to_fill].fillna(method='ffill')
@@ -479,6 +485,7 @@ elif phase == "Advanced Visualization":
                 st.pyplot(fig)
                 plt.clf()
         
+        # Box Plot Comparison
         elif plot_type == "Box Plot Comparison" and categorical_cols and numeric_cols:
             cat_col = st.selectbox("Categorical column:", categorical_cols)
             num_col = st.selectbox("Numeric column:", numeric_cols)
@@ -614,7 +621,6 @@ elif phase == "Statistical Analysis":
                     else:
                         st.warning("Not enough data points for regression analysis (need > 10)")
         
-        # Advanced Machine Learning Section
         st.subheader('🤖 Machine Learning Analysis')
         
         # Target variable selection
@@ -654,7 +660,6 @@ elif phase == "Statistical Analysis":
                 # Handle missing values option
                 handle_missing = st.selectbox("Handle missing values:", ["Drop rows", "Fill with mean/mode"])
             
-            # Preprocessing
             try:
                 X_processed = X.copy()
                 
@@ -750,11 +755,13 @@ elif phase == "Statistical Analysis":
                                     train_acc = accuracy_score(y_train, y_pred_train)
                                     st.metric("Accuracy", f"{train_acc:.4f}")
                                     
-                                    if target_unique == 2:  # Binary classification
+                                    if target_unique == 2:
+                                        # Binary classification
                                         train_prec = precision_score(y_train, y_pred_train, average='binary')
                                         train_rec = recall_score(y_train, y_pred_train, average='binary')
                                         train_f1 = f1_score(y_train, y_pred_train, average='binary')
-                                    else:  # Multi-class
+                                    else:
+                                        # Multi-class
                                         train_prec = precision_score(y_train, y_pred_train, average='weighted')
                                         train_rec = recall_score(y_train, y_pred_train, average='weighted')
                                         train_f1 = f1_score(y_train, y_pred_train, average='weighted')
@@ -763,7 +770,8 @@ elif phase == "Statistical Analysis":
                                     st.metric("Recall", f"{train_rec:.4f}")
                                     st.metric("F1-Score", f"{train_f1:.4f}")
                                 
-                                else:  # Regression
+                                else:
+                                    # Regression
                                     from sklearn.metrics import mean_absolute_error, mean_squared_error
                                     train_r2 = r2_score(y_train, y_pred_train)
                                     train_mae = mean_absolute_error(y_train, y_pred_train)
@@ -776,6 +784,7 @@ elif phase == "Statistical Analysis":
                                     st.metric("RMSE", f"{train_rmse:.4f}")
                             
                             with col2:
+                                # Classification
                                 st.subheader("🎯 Test Metrics")
                                 if problem_type == "Classification":
                                     test_acc = accuracy_score(y_test, y_pred_test)
@@ -794,7 +803,8 @@ elif phase == "Statistical Analysis":
                                     st.metric("Recall", f"{test_rec:.4f}")
                                     st.metric("F1-Score", f"{test_f1:.4f}")
                                 
-                                else:  # Regression
+                                else: 
+                                    # Regression
                                     test_r2 = r2_score(y_test, y_pred_test)
                                     test_mae = mean_absolute_error(y_test, y_pred_test)
                                     test_mse = mean_squared_error(y_test, y_pred_test)
@@ -818,7 +828,8 @@ elif phase == "Statistical Analysis":
                                 st.pyplot(fig)
                                 plt.clf()
                             
-                            else:  # Regression
+                            else: 
+                                # Regression
                                 # Actual vs Predicted plot
                                 fig, ax = plt.subplots(figsize=(10, 6))
                                 ax.scatter(y_test, y_pred_test, alpha=0.6)
