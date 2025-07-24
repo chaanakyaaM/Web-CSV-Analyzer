@@ -20,6 +20,8 @@ load_dotenv()
 # Set page Config
 warnings.filterwarnings('ignore')
 
+st.set_page_config(page_title="CSV Analyzer", layout="wide")
+
 # 🧠 Title & Intro
 st.title("📊 Web CSV Data Analyzer")
 st.markdown("*Comprehensive data analysis tool with advanced features*")
