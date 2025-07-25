@@ -46,7 +46,6 @@ pip install -r requirements.txt
 
 4. **Set up .env file** (optional for Gemini integration)
 ```env
-GEMINI_API_KEY=your_api_key_here
 MODEL_NAME=gemini-pro
 ```
 
@@ -69,7 +68,7 @@ streamlit run app.py
 ---
 
 ## 🤖 Optional: Gemini-Powered Reports
-You can plug in the Gemini API to generate summaries of your dataset's quality, completeness, and key insights — perfect for automated reporting!
+You can plug in the Gemini API key to generate summaries of your dataset's quality, completeness, and key insights — perfect for automated reporting!
 
 ---
 

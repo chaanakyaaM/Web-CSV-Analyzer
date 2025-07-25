@@ -7,12 +7,14 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 from scipy import stats
+from google import genai
 import plotly.express as px
 from dotenv import load_dotenv      
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+
 
 # Load environment variables
 load_dotenv()
@@ -22,12 +24,11 @@ warnings.filterwarnings('ignore')
 
 st.set_page_config(page_title="CSV Analyzer", layout="wide")
 
-# 🧠 Title & Intro
+# Display the title and description
 st.title("📊 Web CSV Data Analyzer")
 st.markdown("*Comprehensive data analysis tool with advanced features*")
 
 # Sidebar for navigation
-st.sidebar.title("🧭 Navigation")
 phase = st.sidebar.selectbox("Select Analysis Phase", [
     "Data Collection", 
     "Data Cleaning", 
@@ -954,6 +955,16 @@ elif phase == "Data Export & Reports":
 
         # Report generation block
         st.subheader("📋 Analysis Report")
+        if "gemini_api_key" not in st.session_state:
+            st.session_state.gemini_api_key = None
+
+        # Request Gemini API Key
+        st.info("This api key is used only for generating the report. This api key is not stored and is secure.")
+        api = st.text_input("Enter your Gemini API Key")
+
+        if api:
+            st.session_state.gemini_api_key = api
+            st.success("Gemini API Key stored successfully!")
 
         if st.button("Generate Analysis Report"):
             report = f"""
@@ -977,9 +988,7 @@ elif phase == "Data Export & Reports":
             - **Completeness:** {((df.count().sum() / (df.shape[0] * df.shape[1])) * 100):.2f}%
             - **Duplicate Rows:** {df.duplicated().sum()}
             """
-            from google import genai
-            api_key = os.getenv("GEMINI_API_KEY")
-
+            api_key = st.session_state.gemini_api_key
             client = genai.Client(api_key = api_key)
 
             try:
